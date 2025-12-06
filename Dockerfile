@@ -9,7 +9,7 @@ RUN apt-get update && \
 RUN rm -rf /var/www/html/*
 
 # Copy application code
-COPY titanapp/ /var/www/html/
+COPY titan-app/ /var/www/html/
 
 # Optional: Set correct permissions
 RUN chown -R www-data:www-data /var/www/html
