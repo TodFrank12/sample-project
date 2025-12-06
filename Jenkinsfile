@@ -10,6 +10,9 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
+                // Clean workspace if needed
+                // cleanWs()
+                
                 git branch: 'main',
                     url: 'https://github.com/TodFrank12/sample-project.git'
             }
