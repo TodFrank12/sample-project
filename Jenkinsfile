@@ -18,10 +18,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    echo "Building Docker Image using shell commands..."
-                    sh """
-                        docker build -t ${DOCKER_HUB_REPO}:${IMAGE_TAG} .
-                    """
+                    echo "Building Docker Image: ${env.DOCKER_HUB_REPO}:${env.IMAGE_TAG}"
+                    docker.build("${env.DOCKER_HUB_REPO}:${env.IMAGE_TAG}")
                 }
             }
         }
@@ -29,12 +27,10 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 script {
-                    echo "Logging in & pushing to Docker Hub..."
-                    sh """
-                        echo "\$DOCKERHUB_PASSWORD" | docker login -u "\$DOCKERHUB_USERNAME" --password-stdin
-                        docker push ${DOCKER_HUB_REPO}:${IMAGE_TAG}
-                        docker logout
-                    """
+                    echo "Pushing image to Docker Hub..."
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                        docker.image("${env.DOCKER_HUB_REPO}:${env.IMAGE_TAG}").push()
+                    }
                 }
             }
         }
@@ -49,4 +45,3 @@ pipeline {
         }
     }
 }
-
